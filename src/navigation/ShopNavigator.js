@@ -4,7 +4,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
+import CartScreen from '../screens/shop/CartScreen';
 import Colors from '../constants/Colors';
+
 const Stack = createStackNavigator();
 
 const ProductsNavigator = () => {
@@ -29,6 +31,7 @@ const ProductsNavigator = () => {
                 title: 'All products',      
               })}
             />
+            <Stack.Screen name="Cart" component={CartScreen} />
             <Stack.Screen 
             name="ProductDetails"
             component={ProductDetailsScreen}
