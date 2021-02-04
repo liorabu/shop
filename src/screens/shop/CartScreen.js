@@ -35,6 +35,7 @@ const CartScreen = props => {
                     color={Colors.accent}
                     title="Order Now"
                     disabled={cartItems.length === 0}
+                    
                     onPress={() =>
                         dispatch(orderActions.addOrder(cartItems, cartTotalAmount))}
                 />
@@ -44,7 +45,9 @@ const CartScreen = props => {
                     data={cartItems}
                     keyExtractor={item => item.id}
                     renderItem={itemData => <CartItem
+                        key={itemData.item.id}
                         item={itemData.item}
+                        deletable={true}
                         onRemove={() => { dispatch(removeFromCart(itemData.item.productId)) }}
                         onIncrease={() => { dispatch(increaseQuantity(itemData.item.productId)) }}
                         onDecrease={() => { dispatch(decreaseQuantity(itemData.item.productId)) }}

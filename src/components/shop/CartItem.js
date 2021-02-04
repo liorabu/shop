@@ -7,22 +7,23 @@ const CartItem = props => {
     return (
         <View style={styles.cartItem}>
             <View style={styles.itemQuantity}>
-            <TouchableOpacity onPress={props.onIncrease} style={styles.increaseButton}>
+                {props.deletable && <TouchableOpacity onPress={props.onIncrease} style={styles.increaseButton}>
                     <Ionicons name="add" size={25} color='red' />
-                </TouchableOpacity>
+                </TouchableOpacity>}
                 <Text style={styles.quantity}>{props.item.quantity}</Text>
-                <TouchableOpacity onPress={props.onDecrease} style={styles.increaseButton}>
+                {props.deletable && <TouchableOpacity onPress={props.onDecrease} style={styles.increaseButton}>
                     <Entypo name="minus" size={25} color='red' />
-                </TouchableOpacity>
+                </TouchableOpacity>}
             </View>
             <View style={styles.itemData}>
                 <Text style={styles.mainText}>{props.item.productTitle}</Text>
             </View>
             <View style={styles.itemData}>
                 <Text style={styles.mainText}>${props.item.sum.toFixed(2)}</Text>
-                <TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
-                    <Ionicons name="md-trash" size={23} color='red' />
-                </TouchableOpacity>
+                {props.deletable &&
+                    (<TouchableOpacity onPress={props.onRemove} style={styles.deleteButton}>
+                        <Ionicons name="md-trash" size={23} color='red' />
+                    </TouchableOpacity>)}
             </View>
         </View>
     );
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#f2f2f2',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 20,
+        marginHorizontal: 20,      
     },
     itemData: {
         flexDirection: 'row',
@@ -45,6 +46,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         alignItems: 'center',
+  
     },
     increaseButton: {
         alignItems: 'center'
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     },
     deleteButton: {
         marginLeft: 20,
-        alignItems:'flex-end'
+        alignItems: 'flex-end'
     }
 });
 
