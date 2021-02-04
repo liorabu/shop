@@ -12,7 +12,14 @@ const ProductsOverviewScreen = props => {
             headerRight:() =>(<HeaderButtons HeaderButtonComponent={HeaderButton} >
                 <Item title="Cart" iconName="cart-outline" onPress={()=>
                props.navigation.navigate('Cart')} />
-            </HeaderButtons>)
+            </HeaderButtons>),
+            headerLeft:()=>(
+                <HeaderButtons HeaderButtonComponent={HeaderButton} >
+                    <Item title="Menu" iconName="md-menu" onPress={()=>
+                     props.navigation.toggleDrawer()
+                    }/>
+                </HeaderButtons>
+            )
         });
     }, [props.navigation, props.route]);
 

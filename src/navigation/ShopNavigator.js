@@ -1,44 +1,41 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
-import ProductDetailsScreen from '../screens/shop/ProductDetailsScreen';
-import CartScreen from '../screens/shop/CartScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import OrderNavigator from './OrderNavigation';
+import ProductsNavigator from './ProductsNavigator';
 import Colors from '../constants/Colors';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-const ProductsNavigator = () => {
-   return <NavigationContainer>
-        <Stack.Navigator
-            screenOptions={{
-                headerStyle: { backgroundColor: Colors.primary },
-                headerTintColor: 'white',
-                headerTitleAlign:'center',
-                headerTitleStyle:{
-                    fontFamily:'OpenSans-Bold'
-                } ,
-                headerBackTitleStyle:{
-                    fontFamily:'OpenSans-Regular'
-                }
-            }}
-        >
-            <Stack.Screen 
-            name="ProductsOverview" 
-            component={ProductsOverviewScreen}
-            options={() => ({
-                title: 'All products',      
-              })}
-            />
-            <Stack.Screen name="Cart" component={CartScreen} />
-            <Stack.Screen 
-            name="ProductDetails"
-            component={ProductDetailsScreen}
-            options={({ route }) => ({ title: route.params.title })}
-            />
-            
-        </Stack.Navigator>
-    </NavigationContainer>
+const ShopNavigator = () => {
+    return (
+        <NavigationContainer>
+            <Drawer.Navigator
+            drawerContentOptions={{
+                activeTintColor:Colors.primary,
+                labelStyle:{
+                    fontWeight:'bold',
+                },
+            }
+            }>
+                <Drawer.Screen
+                 name="products"
+                  component={ProductsNavigator}
+
+                  options={{
+                      drawerIcon:({color}) =><Ionicons name="md-cart" size={23}  color={color}/> 
+                  }}
+                />
+                <Drawer.Screen 
+                name="orders" 
+                component={OrderNavigator} 
+                options={{
+                    drawerIcon:({color}) =><Ionicons name="md-list" size={23}  color={color}/> 
+                }}/>
+            </Drawer.Navigator>
+        </NavigationContainer>
+    );
 };
-export default ProductsNavigator;
+export default ShopNavigator;

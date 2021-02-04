@@ -13,14 +13,16 @@ import { Provider } from 'react-redux';
 
 import productsReducer from './src/store/reducers/products';
 import cartReducer from './src/store/reducers/cart';
+import orderReducer from './src/store/reducers/orders';
 
-import ProductsNavigator from './src/navigation/ShopNavigator';
+import ShopNavigator from './src/navigation/ShopNavigator';
 import { OverflowMenuProvider } from 'react-navigation-header-buttons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const rootReducer = combineReducers({
   products: productsReducer,
-  cart: cartReducer
+  cart: cartReducer,
+  orders:orderReducer
 });
 
 const store = createStore(rootReducer);
@@ -30,7 +32,7 @@ export default function App() {
     <Provider store={store}>
       <OverflowMenuProvider>
         <SafeAreaProvider>
-          <ProductsNavigator />
+          <ShopNavigator />
         </SafeAreaProvider>
       </OverflowMenuProvider>
     </Provider>
