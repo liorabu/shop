@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import OrderNavigator from './OrderNavigation';
 import ProductsNavigator from './ProductsNavigator';
+import AdminNavigator from './AdminNavigator';
 import Colors from '../constants/Colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -15,6 +16,7 @@ const ShopNavigator = () => {
             <Drawer.Navigator
             drawerContentOptions={{
                 activeTintColor:Colors.primary,
+                inactiveTintColor:Colors.accent,
                 labelStyle:{
                     fontWeight:'bold',
                 },
@@ -34,6 +36,14 @@ const ShopNavigator = () => {
                 options={{
                     drawerIcon:({color}) =><Ionicons name="md-list" size={23}  color={color}/> 
                 }}/>
+                  <Drawer.Screen
+                 name="Admin"
+                  component={AdminNavigator}
+
+                  options={{
+                      drawerIcon:({color}) =><Ionicons name="md-create" size={23}  color={color}/> 
+                  }}
+                />
             </Drawer.Navigator>
         </NavigationContainer>
     );
