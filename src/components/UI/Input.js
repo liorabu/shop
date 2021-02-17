@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from 'react-native';
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'Input_Change':
+        case 'INPUT_CHANGE':
             return {
                 ...state,
                 value: action.value,
@@ -14,11 +14,11 @@ const reducer = (state, action) => {
                 ...state,
                 touched: true
             };
-            case 'INPUT_FOCUS':
-                return {
-                    ...state,
-                    touched: false
-                };
+        case 'INPUT_FOCUS':
+            return {
+                ...state,
+                touched: false
+            };
         default:
             return state
     }
@@ -58,7 +58,7 @@ const Input = props => {
         if (props.minLength != null && text.length < props.minLength) {
             isValid = false;
         }
-        dispatch({ type: INPUT_CHANGE, value: text, isValid: isValid });
+        dispatch({ type: 'INPUT_CHANGE', value: text, isValid: isValid });
     };
 
     const lostFocusHandler = () => {
@@ -103,14 +103,15 @@ const styles = StyleSheet.create({
         borderBottomColor: '#ccc',
         borderBottomWidth: 1,
     },
-    errorContainer:{
-        marginVertical:5
+    errorContainer: {
+        marginVertical: 5
     },
-    errorText:{
-        fontFamily:'OpenSans-Regular',
-        color:'red',
-        fontSize:13
+    errorText: {
+        fontFamily: 'OpenSans-Regular',
+        color: 'red',
+        fontSize: 13
     }
 });
 
 export default Input;
+

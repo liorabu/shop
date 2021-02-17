@@ -1,6 +1,6 @@
 import PRODUCTS from '../../data/dummy-data';
 import Product from '../../models/product';
-import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT } from '../actions/products';
+import { DELETE_PRODUCT, CREATE_PRODUCT, UPDATE_PRODUCT, SET_PRODUCTS } from '../actions/products';
 
 const initialState = {
     availableProducts: PRODUCTS,
@@ -9,6 +9,12 @@ const initialState = {
 
 export default (state = initialState, action) => {
     switch (action.type) {
+        case SET_PRODUCTS:
+            return {
+                ...state,
+                availableProducts: action.products,
+                userProducts: action.products.filter(product => product.ownerId === 'u1')
+            }
         case DELETE_PRODUCT:
             return {
                 ...state,
@@ -17,7 +23,8 @@ export default (state = initialState, action) => {
             }
         case CREATE_PRODUCT:
             const newProduct = new Product(
-                new Date().toString, 'u1',
+                action.productData.id,
+                'u1',
                 action.productData.title,
                 action.productData.imageUrl,
                 action.productData.description,
@@ -29,26 +36,28 @@ export default (state = initialState, action) => {
                 userProducts: [...state.userProducts, newProduct]
             }
         case UPDATE_PRODUCT:
-            console.log(action.productData.title)
-            const availableProductIndex= state.availableProducts.findIndex(prod => prod.id === action.pId);
+            const availableProductIndex = state.availableProducts.findIndex(prod => prod.id === action.pId);
             const productIndex = state.userProducts.findIndex(prod => prod.id === action.pId);
-            const updatedProduct = new Product(
-                action.pId,
-                state.userProducts[productIndex].ownerId,
-                action.productData.title,
-                action.productData.imageUrl,
-                action.productData.description,
-                state.userProducts[productIndex].price
-            )
-            const updatedUserProducts=[...state.userProducts];
-            updatedUserProducts[productIndex]=updatedProduct;
-            const updatedAvailableProducts=[...state.availableProducts];
-            updatedAvailableProducts[availableProductIndex]=updatedProduct;
-            return {
-                ...state,
-                availableProducts:updatedUserProducts,
-                userProducts:updatedUserProducts
-            }
-    }
+
+                const updatedProduct = new Product(
+                    action.pId,
+                    state.userProducts[productIndex].ownerId,
+                    action.productData.title,
+                    action.productData.imageUrl,
+                    action.productData.description,
+                    state.userProducts[productIndex].price
+                )
+                const updatedUserProducts=[...state.userProducts];
+                updatedUserProducts[productIndex]=updatedProduct;
+                const updatedAvailableProducts=[...state.availableProducts];
+                updatedAvailableProducts[availableProductIndex]=updatedProduct;
+                return {
+                    ...state,
+                    availableProducts:updatedUserProducts,
+                    userProducts:updatedUserProducts
+                }
+        };
+    
     return state;
 };
+

@@ -8,8 +8,9 @@
 
 
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers,applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
+import ReduxThunk from 'redux-thunk';
 
 import productsReducer from './src/store/reducers/products';
 import cartReducer from './src/store/reducers/cart';
@@ -25,7 +26,7 @@ const rootReducer = combineReducers({
   orders:orderReducer
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer,applyMiddleware(ReduxThunk));
 
 export default function App() {
   return (

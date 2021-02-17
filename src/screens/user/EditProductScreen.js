@@ -1,12 +1,15 @@
-import React, { useCallback, useReducer } from 'react';
-import { View, ScrollView, StyleSheet, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useState, useCallback, useReducer } from 'react';
+import { View, ScrollView, StyleSheet, Alert, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderButton from '../../components/UI/headerButton';
 import { useSelector, useDispatch } from 'react-redux';
-import { createProduct, updateProduct } from '../../store/actions/products';
+import * as productsActions from '../../store/actions/products';
 import Input from '../../components/UI/Input';
+import Colors from '../../constants/Colors';
+import { useEffect } from 'react/cjs/react.development';
 
-const resucer = (state, action) => {
+
+const reducer = (state, action) => {
     switch (action.type) {
         case 'FORM_INPUT_UPDATE':
             const updatedValues = {
@@ -22,6 +25,7 @@ const resucer = (state, action) => {
                 updatedFormIsValid = updatedFormIsValid && updatedValidities[key];
             }
             return {
+                ...state,
                 formIsValid: updatedFormIsValid,
                 inputValidities: updatedValidities,
                 inputValues: updatedValues
@@ -34,8 +38,11 @@ const resucer = (state, action) => {
 const EditProducts = props => {
     const prodId = props.route?.params?.productId;
     const editedProduct = useSelector(state => state.products.userProducts.find(prod => prod.id === prodId))
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, serError] = useState();
+    const dispatch = useDispatch();
 
-    const [formState, formDispatch] = useReducer(resucer, {
+    const [formState, formDispatch] = useReducer(reducer, {
         inputValues: {
             title: editedProduct?.title ?? '',
             imageUrl: editedProduct?.imageUrl ?? '',
@@ -49,35 +56,47 @@ const EditProducts = props => {
             description: editedProduct ? true : false
         },
         formIsValid: editedProduct ? true : false
-    })
+    });
 
-    const dispatch = useDispatch();
+    useEffect(() => {
+        if (error) {
+            Alert.alert('An error occurred!', error, [{ text: 'Okay' }])
+        };
+    }, [error]);
 
-    const submitHandler = useCallback(() => {
+    const submitHandler = useCallback(async () => {
         if (!formState.formIsValid) {
             Alert.alert('Wrong input!', 'Please check the errors in the form.', [
                 { text: 'Okay' }
             ]);
             return;
         }
-        {
+
+        setIsLoading(true);
+        serError(null);
+        try {
+
             editedProduct ?
-                dispatch(updateProduct(
+                await dispatch(productsActions.updateProduct(
                     prodId,
                     formState.inputValues.title,
                     formState.inputValues.description,
                     formState.inputValues.imageUrl
                 ))
                 :
-                dispatch(createProduct(
+                await dispatch(productsActions.createProduct(
                     formState.inputValues.title,
                     formState.inputValues.description,
                     formState.inputValues.imageUrl,
                     +formState.inputValues.price
                 ))
+            props.navigation.goBack();
+        } catch (err) {
+            serError(err.message);
         }
-        props.navigation.goBack();
+        setIsLoading(false);
     }, [dispatch, prodId, formState]);
+
 
     const inputChangeHandler = useCallback(
         (inputIdentifier, inputValue, inputValidity) => {
@@ -103,6 +122,12 @@ const EditProducts = props => {
             )
         });
     }, [submitHandler, props.navigation, props.route]);
+
+    if (isLoading) {
+        return <View style={styles.centered}>
+            <ActivityIndicator size='large' color={Colors.primary} />
+        </View>
+    }
 
     return (
         <KeyboardAvoidingView
@@ -172,7 +197,11 @@ const styles = StyleSheet.create({
     form: {
         margin: 20
     },
-
+    centered: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });
 
 export default EditProducts;
