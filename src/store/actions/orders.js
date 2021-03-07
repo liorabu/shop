@@ -1,14 +1,15 @@
 export const ADD_ORDER = 'ADD_ORDER';
-import { ordersDB } from '../../api/firebase';
+import { ordersDB,addOrdersDB } from '../../api/firebase';
 import Order from '../../models/order';
 export const SET_ORDERS='SET_ORDERS';
 
 
 export const fetchOrders=()=>{
-    return async dispatch=>{
-        
+    return async (dispatch,getState)=>{
         try {
-            const response = await fetch(ordersDB);
+            const userId = getState().auth.userId;
+            const ordersApi= await ordersDB(userId);
+            const response = await fetch(ordersApi);
 
             if (!response.ok) {
                 throw new Error('Something went wrong!')
@@ -32,9 +33,12 @@ export const fetchOrders=()=>{
 }
 
 export const addOrder = (cartItems, totalAmount) => {
-    return async dispatch => {
+    return async (dispatch,getState) => {
         const date = new Date();
-        const response = await fetch(ordersDB, {
+        const token=getState().auth.token;
+        const userId=getState().auth.userId;
+        const addOrderApi=addOrdersDB(userId,token)
+        const response = await fetch(addOrderApi, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

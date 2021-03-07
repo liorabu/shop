@@ -2,6 +2,7 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import OrderScreen from '../screens/shop/OrderScreen';
 import Colors from '../constants/Colors';
 
@@ -21,12 +22,13 @@ const OrderNavigation = () => {
                     fontFamily: 'OpenSans-Regular'
                 }
             }} >
+            
             <Stack.Screen
                 name="Orders"
                 component={OrderScreen}
             />
         </Stack.Navigator>
-  )
+    )
 }
 
 export default OrderNavigation;

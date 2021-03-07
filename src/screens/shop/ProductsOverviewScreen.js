@@ -76,9 +76,7 @@ const ProductsOverviewScreen = props => {
             <Text>No products found! Maybe stert adding some!</Text>
         </View>
     }
-
-
-
+    
     return <FlatList
         onRefresh={loadProducts}
         refreshing={isRefreshing}

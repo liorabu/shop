@@ -37,7 +37,13 @@ const reducer = (state, action) => {
 
 const EditProducts = props => {
     const prodId = props.route?.params?.productId;
-    const editedProduct = useSelector(state => state.products.userProducts.find(prod => prod.id === prodId))
+    let editedProduct;
+    if (prodId) {
+        editedProduct = useSelector(state => state.products.userProducts.find(prod => prod.id === prodId))
+    }
+
+
+
     const [isLoading, setIsLoading] = useState(false);
     const [error, serError] = useState();
     const dispatch = useDispatch();
@@ -71,11 +77,9 @@ const EditProducts = props => {
             ]);
             return;
         }
-
         setIsLoading(true);
         serError(null);
         try {
-
             editedProduct ?
                 await dispatch(productsActions.updateProduct(
                     prodId,
