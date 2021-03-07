@@ -10,7 +10,6 @@ export const fetchProducts = () => {
     return async (dispatch,getState) => {
       
         const userId=getState().auth.userId;
-        console.log(userId)
         try {
             const response = await fetch(productsDB);
 
@@ -30,7 +29,7 @@ export const fetchProducts = () => {
                     resData[key].price
                 ));
             }
-            dispatch({ type: SET_PRODUCTS, products: loadedProducts ,userOProducts:loadedProducts.filter(prod=>prod.ownerId===userId)})
+            dispatch({ type: SET_PRODUCTS, products: loadedProducts ,userProducts:loadedProducts.filter(prod=>prod.ownerId===userId)})
         } catch (err) {
             throw err;
         }
